@@ -1,0 +1,23 @@
+#pragma once
+
+#include <QColor>
+
+class QApplication;
+
+namespace fg::theme {
+
+inline const QColor kWindow{0x0b, 0x0c, 0x10};
+inline const QColor kPanel{0x12, 0x14, 0x1a};
+inline const QColor kCard{0x1a, 0x1d, 0x25};
+inline const QColor kCardHover{0x22, 0x26, 0x30};
+inline const QColor kBorder{0x26, 0x2a, 0x35};
+inline const QColor kText{0xe6, 0xe8, 0xee};
+inline const QColor kTextDim{0x8a, 0x90, 0xa0};
+inline const QColor kAccent{0x39, 0xd0, 0xff};
+inline const QColor kAccent2{0x8b, 0x5c, 0xf6};
+inline const QColor kDanger{0xff, 0x5c, 0x6c};
+inline const QColor kOk{0x3d, 0xdc, 0x97};
+
+void apply(QApplication& app);
+
+} // namespace fg::theme

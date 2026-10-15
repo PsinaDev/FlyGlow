@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>FlyGlow</title>
+  <defs>
+    <linearGradient id="face" gradientUnits="userSpaceOnUse" x1="46.08" y1="36" x2="158.72" y2="218">
+      <stop offset="0" stop-color="#39d0ff"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="rim" gradientUnits="userSpaceOnUse" x1="46.08" y1="36" x2="158.72" y2="218">
+      <stop offset="0" stop-color="#2a91b3"/>
+      <stop offset="1" stop-color="#6242ac"/>
+    </linearGradient>
+    <linearGradient id="sheen" gradientUnits="userSpaceOnUse" x1="0" y1="36" x2="0" y2="136.1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="0.4" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+  </defs>
+  <path filter="url(#glow)" opacity="0.75" fill="url(#face)" d="M73.97 36 L182.03 36 A29 29 0 0 1 207.21 79.39 L153.18 173.94 A29 29 0 0 1 102.82 173.94 L48.79 79.39 A29 29 0 0 1 73.97 36 Z"/>
+  <path fill="url(#rim)" d="M73.97 36 L182.03 36 A29 29 0 0 1 207.21 79.39 L153.18 173.94 A29 29 0 0 1 102.82 173.94 L48.79 79.39 A29 29 0 0 1 73.97 36 Z"/>
+  <path fill="url(#face)" d="M73.97 40 L182.03 40 A25 25 0 0 1 203.73 77.4 L149.71 171.95 A25 25 0 0 1 106.29 171.95 L52.27 77.4 A25 25 0 0 1 73.97 40 Z"/>
+  <path fill="url(#sheen)" d="M73.97 40 L182.03 40 A25 25 0 0 1 203.73 77.4 L149.71 171.95 A25 25 0 0 1 106.29 171.95 L52.27 77.4 A25 25 0 0 1 73.97 40 Z"/>
+  <g fill="url(#halo)">
+    <circle cx="65.6" cy="60.14" r="20"/>
+    <circle cx="107.2" cy="60.14" r="20"/>
+    <circle cx="148.8" cy="60.14" r="20"/>
+    <circle cx="190.4" cy="60.14" r="20"/>
+    <circle cx="86.4" cy="96.54" r="20"/>
+    <circle cx="169.6" cy="96.54" r="20"/>
+    <circle cx="107.2" cy="132.94" r="20"/>
+    <circle cx="148.8" cy="132.94" r="20"/>
+    <circle cx="128" cy="169.34" r="20"/>
+  </g>
+  <g fill="#ffffff" fill-opacity="0.95">
+    <circle cx="65.6" cy="60.14" r="5"/>
+    <circle cx="107.2" cy="60.14" r="5"/>
+    <circle cx="148.8" cy="60.14" r="5"/>
+    <circle cx="190.4" cy="60.14" r="5"/>
+    <circle cx="86.4" cy="96.54" r="5"/>
+    <circle cx="169.6" cy="96.54" r="5"/>
+    <circle cx="107.2" cy="132.94" r="5"/>
+    <circle cx="148.8" cy="132.94" r="5"/>
+    <circle cx="128" cy="169.34" r="5"/>
+  </g>
+</svg>

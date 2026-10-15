@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file>chevron-down.svg</file>
+        <file>flyglow.svg</file>
+        <file>flyglow-256.png</file>
+        <file>flyglow.ico</file>
+    </qresource>
+</RCC>
