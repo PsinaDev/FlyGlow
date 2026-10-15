@@ -1,0 +1,30 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reports from other Flydigi hardware and firmware versions decide what gets supported next.
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - CD2 / Charging Dock 2 Pro
+        - Vader 5 Pro
+        - Apex 5
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version
+      description: Shown in Space Station's device page.
+      placeholder: "0.0.3.9"
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: What did you try and what happened?
+    validations:
+      required: true

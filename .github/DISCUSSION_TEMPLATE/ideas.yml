@@ -1,0 +1,29 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Effect requests and feature ideas. One idea per discussion makes upvotes meaningful.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of idea
+      options:
+        - New effect
+        - Editor or painting
+        - GIF / video import
+        - Device support
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What should FlyGlow do?
+      placeholder: A slow aurora that drifts from the tip of the dock to the top...
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: A video, GIF, screenshot or link that shows what you mean.

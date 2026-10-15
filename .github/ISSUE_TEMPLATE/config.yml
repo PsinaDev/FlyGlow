@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or help
+    url: https://github.com/PsinaDev/FlyGlow/discussions/categories/q-a
+    about: Ask in Discussions, Q&A.
+  - name: Effect request or idea
+    url: https://github.com/PsinaDev/FlyGlow/discussions/categories/ideas
+    about: Suggest it in Discussions, Ideas.
+  - name: Other Flydigi devices
+    url: https://github.com/PsinaDev/FlyGlow/discussions/categories/devices
+    about: Report how FlyGlow behaves with your hardware.

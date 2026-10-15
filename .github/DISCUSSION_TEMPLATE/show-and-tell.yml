@@ -1,0 +1,24 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share what your dock looks like. A short video says more than any screenshot.
+  - type: textarea
+    id: what
+    attributes:
+      label: What did you make?
+      placeholder: Effects and layers you used, how long the loop is, anything special.
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Video or photo of the dock
+      description: Drag and drop a video, GIF or photo here.
+    validations:
+      required: true
+  - type: textarea
+    id: scene
+    attributes:
+      label: Scene file
+      description: Zip your .flyglow file and attach it so others can load it.

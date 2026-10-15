@@ -1,0 +1,30 @@
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: FlyGlow version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - Installer
+        - Portable
+        - Built from source
+  - type: dropdown
+    id: space-station
+    attributes:
+      label: Is Flydigi Space Station running?
+      options:
+        - "Yes"
+        - "No"
+        - Not installed
