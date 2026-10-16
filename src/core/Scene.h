@@ -37,8 +37,8 @@ public:
     std::vector<std::unique_ptr<Layer>> layers;   /**< [0] is the bottom layer */
     double loopSeconds = 4.0;
     int brightness = 100;       /**< dock brightness 1..100 */
-    double outputGamma = 2.2;   /**< matching kDockGamma keeps the preview's light ratios on the LEDs; 1 sends linear values */
-    bool dither = true;         /**< temporal error diffusion across frames when baking */
+    double outputGamma = 1.4;   /**< matching kDockGamma keeps the preview's light ratios on the LEDs; 1 sends linear values */
+    bool dither = false;        /**< temporal error diffusion across frames when baking */
 
     /** Composites at phase into out, resized to layout.count(); linear light. */
     void render(double phase, const LedLayout& layout, std::vector<Rgb>& out) const;
@@ -68,10 +68,11 @@ void bakeTiming(const Scene& scene, int maxFrames, int* frameCount, int* period)
 BakeResult bake(const Scene& scene, const LedLayout& layout, int maxFrames = 200);
 
 /**
- * How the dock turns an output value into light: roughly (value / 255)^kDockGamma. Measured on firmware 0.0.3.9,
- * where values up to 8 leave the LEDs dark.
+ * How the dock turns an output value into light: roughly (value / 255)^kDockGamma, except that values up to
+ * kDockDarkValue leave the LEDs dark. Judged by eye against a 50% checker on firmware 0.0.3.9.
  */
-inline constexpr double kDockGamma = 2.2;
+inline constexpr double kDockGamma = 1.4;
+inline constexpr int kDockDarkValue = 8;
 
 /** Linear light to the unrounded 0..255 output value for the given output gamma. */
 float encodeOutput(float linear, double gamma);

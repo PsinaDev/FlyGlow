@@ -54,9 +54,10 @@ leftovers of the previous animation. A pack round trip takes about 9 ms, so a 20
 (1945 packs) uploads in about 17 s.
 
 The LEDs do not give out light in proportion to the value: on firmware 0.0.3.9 values up to 8 leave them dark,
-and the response is close to `(value / 255)^2.2`. FlyGlow therefore sends gamma-2.2-encoded values by default;
-`examples/dock-curve-test.flyglow` shows the low values and a 50% checker next to values 128 and 186 for
-checking another unit.
+and above that the response is close to `(value / 255)^1.4` (a 50% checker of full and dark LEDs matches values of
+about 150). FlyGlow therefore sends gamma-1.4-encoded values by default. `examples/dock-curve-test.flyglow` shows
+the low values and `examples/dock-gamma-test.flyglow` puts the checker next to values 128, 156, 173 and 186, for
+checking another unit; compare at about 20% brightness, where full LEDs do not dazzle.
 
 ## 4. Useful read-only commands
 

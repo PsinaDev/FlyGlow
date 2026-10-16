@@ -3,8 +3,8 @@
  "version": 1,
  "loopSeconds": 6,
  "brightness": 100,
- "outputGamma": 2.2,
- "dither": true,
+ "outputGamma": 1.4,
+ "dither": false,
  "layers": [
   {
    "name": "Aurora",

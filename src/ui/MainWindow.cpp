@@ -679,7 +679,7 @@ void MainWindow::renderPreview()
         m_previewErrOut = m_previewErrIn;
         std::vector<uchar> codes(out.size() * 3);
         encodeFrame(out, scene.outputGamma, scene.dither && frames > 1 ? &m_previewErrOut : nullptr, codes.data());
-        auto light = [](uchar v) { return float(std::pow(v / 255.0, kDockGamma)); };
+        auto light = [](uchar v) { return v <= kDockDarkValue ? 0.f : float(std::pow(v / 255.0, kDockGamma)); };
         for (size_t i = 0; i < out.size(); ++i)
             out[i] = {light(codes[i * 3]), light(codes[i * 3 + 1]), light(codes[i * 3 + 2])};
     } else {
@@ -1084,8 +1084,9 @@ void MainWindow::showOutputSettings()
     gamma->setRange(0.6, 2.6, 0.05);
     gamma->setValue(scene.outputGamma);
     v->addWidget(gamma);
-    addNote(tr("The dock's firmware turns values into light along its own curve, close to gamma 2.2, so 2.2 keeps "
-               "the preview's light ratios on the LEDs. Lower values make dark colours darker and cut fades short."));
+    addNote(tr("The dock turns values into light along its own curve, close to gamma 1.4, so 1.4 keeps the "
+               "preview's light ratios on the LEDs. Higher values brighten dim colours and wash out mixed hues; lower "
+               "values make dark colours darker."));
 
     v->addSpacing(8);
     auto* ditherRow = new QHBoxLayout();
@@ -1094,7 +1095,8 @@ void MainWindow::showOutputSettings()
     dither->setChecked(scene.dither);
     ditherRow->addWidget(dither);
     v->addLayout(ditherRow);
-    addNote(tr("Spreads the 8-bit rounding error across frames, removing banding in dark smooth gradients."));
+    addNote(tr("Spreads the 8-bit rounding error across frames, smoothing slow dark fades. Off by default: dim "
+               "colours near the point where the LEDs switch on can flicker from frame to frame."));
 
     v->addSpacing(8);
     v->addWidget(new QLabel(tr("Maximum frames per animation"), &dlg));

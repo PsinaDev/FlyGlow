@@ -436,6 +436,11 @@
         <translation>Насыщенность</translation>
     </message>
     <message>
+        <location filename="../src/core/effects/WaveEffects.cpp" line="31"/>
+        <source>Band sharpness</source>
+        <translation>Чёткость полос</translation>
+    </message>
+    <message>
         <location filename="../src/core/effects/WaveEffects.cpp" line="52"/>
         <source>Rainbow spiral</source>
         <translation>Радужная спираль</translation>
@@ -1261,8 +1266,8 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1019"/>
-        <source>The dock&apos;s firmware turns values into light along its own curve, close to gamma 2.2, so 2.2 keeps the preview&apos;s light ratios on the LEDs. Lower values make dark colours darker and cut fades short.</source>
-        <translation>Прошивка дока сама переводит значения в свет по своей кривой, близкой к гамме 2,2, поэтому при 2,2 соотношения света на диодах такие же, как в превью. Меньшие значения делают тёмные цвета темнее и обрезают затухания.</translation>
+        <source>The dock turns values into light along its own curve, close to gamma 1.4, so 1.4 keeps the preview&apos;s light ratios on the LEDs. Higher values brighten dim colours and wash out mixed hues; lower values make dark colours darker.</source>
+        <translation>Док переводит значения в свет по своей кривой, близкой к гамме 1,4, поэтому при 1,4 соотношения света на диодах такие же, как в превью. Большие значения высветляют тусклые цвета и размывают смешанные оттенки, меньшие делают тёмные цвета темнее.</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1024"/>
@@ -1271,8 +1276,8 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1029"/>
-        <source>Spreads the 8-bit rounding error across frames, removing banding in dark smooth gradients.</source>
-        <translation>Распределяет ошибку округления до 8 бит по кадрам и убирает полосы в тёмных плавных градиентах.</translation>
+        <source>Spreads the 8-bit rounding error across frames, smoothing slow dark fades. Off by default: dim colours near the point where the LEDs switch on can flicker from frame to frame.</source>
+        <translation>Распределяет ошибку округления до 8 бит по кадрам и сглаживает медленные тёмные затухания. По умолчанию выключен: тусклые цвета у порога, где диоды начинают светиться, могут мигать от кадра к кадру.</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1032"/>

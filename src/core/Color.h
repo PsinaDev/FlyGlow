@@ -55,6 +55,8 @@ Rgb dim(const Rgb& c, float perceived);
 
 /** Cyclic rainbow for h in [0, 1) whose hue sweeps at an even perceptual pace. */
 Rgb rainbow(float h);
+/** Same circle; bands 0..1 makes each primary hold longer and the blends between them pass quicker. */
+Rgb rainbow(float h, float bands);
 
 Rgb clamp01(const Rgb& c);
 /** Rec. 709 relative luminance of a linear colour. */

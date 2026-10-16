@@ -1,0 +1,47 @@
+{
+    "brightness": 100,
+    "dither": true,
+    "format": "flyglow",
+    "layers": [
+        {
+            "blend": 0,
+            "effect": {
+                "params": {
+                    "cycles": 1,
+                    "gradient": [
+                        {
+                            "color": "#000000",
+                            "pos": 0
+                        },
+                        {
+                            "color": "#3c0000",
+                            "pos": 0.2039627039627037
+                        },
+                        {
+                            "color": "#d21600",
+                            "pos": 0.44638694638694587
+                        },
+                        {
+                            "color": "#ff5f00",
+                            "pos": 0.7284382284382281
+                        },
+                        {
+                            "color": "#ffaa14",
+                            "pos": 1
+                        }
+                    ],
+                    "height": 100,
+                    "seed": 1,
+                    "turbulence": 70
+                },
+                "type": "fire"
+            },
+            "name": "Огонь",
+            "opacity": 1,
+            "visible": true
+        }
+    ],
+    "loopSeconds": 2,
+    "outputGamma": 1,
+    "version": 1
+}

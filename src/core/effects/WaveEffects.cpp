@@ -28,6 +28,7 @@ public:
             pAngle(0),
             pFloat("scale", QT_TRANSLATE_NOOP("Effects", "Waves across the dock"), 1.0, 0.25, 4.0, 0.05, "×"),
             pPercent("saturation", QT_TRANSLATE_NOOP("Effects", "Saturation"), 100),
+            pPercent("bands", QT_TRANSLATE_NOOP("Effects", "Band sharpness"), 50),
             pCycles(1),
         };
     }
@@ -38,9 +39,10 @@ public:
         projectLeds(L, f("angle"), t);
         const double scale = f("scale");
         const double sat = f("saturation") / 100.0;
+        const float bands = float(f("bands") / 100.0);
         const double shift = ctx.phase * i("cycles");
         for (int k = 0; k < L.count(); ++k) {
-            const Rgb col = color::rainbow(float(fract(t[size_t(k)] * scale - shift)));
+            const Rgb col = color::rainbow(float(fract(t[size_t(k)] * scale - shift)), bands);
             out[size_t(k)] = Rgba(pastel(col, sat), 1.f);
         }
     }
@@ -58,6 +60,7 @@ public:
             pFloat("twist", QT_TRANSLATE_NOOP("Effects", "Twist"), 0.7, -3.0, 3.0, 0.05),
             pChoice("direction", QT_TRANSLATE_NOOP("Effects", "Rotation"), rotationChoices(), 0),
             pPercent("saturation", QT_TRANSLATE_NOOP("Effects", "Saturation"), 100),
+            pPercent("bands", QT_TRANSLATE_NOOP("Effects", "Band sharpness"), 50),
             pCycles(1),
         };
     }
@@ -68,11 +71,12 @@ public:
         const double twist = f("twist");
         const double dir = i("direction") == 0 ? 1.0 : -1.0;
         const double sat = f("saturation") / 100.0;
+        const float bands = float(f("bands") / 100.0);
         const double shift = dir * ctx.phase * i("cycles");
         for (int k = 0; k < L.count(); ++k) {
             const Led& led = L.led(k);
             const double h = arms * led.angle / kTau + twist * led.radius - shift;
-            out[size_t(k)] = Rgba(pastel(color::rainbow(float(fract(h))), sat), 1.f);
+            out[size_t(k)] = Rgba(pastel(color::rainbow(float(fract(h)), bands), sat), 1.f);
         }
     }
 };

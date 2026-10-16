@@ -150,7 +150,7 @@ bool Scene::fromJson(const QJsonObject& o, QString* error)
     loopSeconds = std::clamp(o.value("loopSeconds").toDouble(4.0), 0.2, 60.0);
     brightness = std::clamp(o.value("brightness").toInt(100), 1, 100);
     outputGamma = std::clamp(o.value("outputGamma").toDouble(kDockGamma), 0.5, 3.0);
-    dither = o.value("dither").toBool(true);
+    dither = o.value("dither").toBool(false);
     return true;
 }
 

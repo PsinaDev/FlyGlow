@@ -103,6 +103,28 @@ Rgb rainbow(float h)
     return g.sample(h, true);
 }
 
+Rgb rainbow(float h, float bands)
+{
+    static const ColorGradient g = ColorGradient::rainbow();
+    const float k = std::clamp(bands, 0.f, 1.f);
+    if (k <= 0.f)
+        return g.sample(h, true);
+    const QVector<GradientStop>& stops = g.stops();
+    const double t = h - std::floor(h);
+    qsizetype i = stops.size() - 1;
+    for (qsizetype s = 0; s < stops.size(); ++s)
+        if (stops[s].pos <= t)
+            i = s;
+    const double a = stops[i].pos;
+    const double b = i + 1 < stops.size() ? stops[i + 1].pos : 1.0 + stops[0].pos;
+    // Smoothstep has zero slope at both stops, so it lingers on each primary; applied twice it lingers longer.
+    const double u = (t - a) / (b - a);
+    const double once = u * u * (3.0 - 2.0 * u);
+    const double twice = once * once * (3.0 - 2.0 * once);
+    const double eased = k < 0.5f ? u + (once - u) * 2.0 * k : once + (twice - once) * (2.0 * k - 1.0);
+    return g.sample(a + eased * (b - a), true);
+}
+
 Rgb clamp01(const Rgb& c)
 {
     return {std::clamp(c.r, 0.f, 1.f), std::clamp(c.g, 0.f, 1.f), std::clamp(c.b, 0.f, 1.f)};
