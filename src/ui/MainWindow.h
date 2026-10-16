@@ -20,6 +20,7 @@ class HidDock;
 class Inspector;
 class ProgressButton;
 class Project;
+class ShaderEditor;
 class SliderRow;
 class SpaceStationClient;
 class Timeline;
@@ -78,6 +79,8 @@ private:
 
     void replaceCurrentEffect(const QString& typeId);
     void importMedia();
+    void addShaderLayer();
+    void openShaderEditor();
     void sendToDock();
     void showOutputSettings();
 
@@ -96,6 +99,7 @@ private:
     Timeline* m_timeline;
     EffectLibrary* m_library;
     Inspector* m_inspector;
+    ShaderEditor* m_shaderEditor = nullptr;
 
     QLabel* m_statusPill;
     QToolButton* m_newBtn;
@@ -113,6 +117,7 @@ private:
     QToolButton* m_eraserBtn;
     QToolButton* m_fillBtn;
     QToolButton* m_pickerBtn;
+    QToolButton* m_mirrorBtn;
     ColorButton* m_colorBtn;
     QLabel* m_sizeLabel;
     SliderRow* m_sizeSlider;
@@ -148,6 +153,10 @@ private:
     std::vector<Rgba> m_keyClipboard;
 
     int m_maxFrames = 200;
+    bool m_dockPreview = false;
+    int m_previewFrame = -1;
+    std::vector<float> m_previewErrIn;
+    std::vector<float> m_previewErrOut;
     int m_uploadId = -1;
     UploadVia m_uploadVia = UploadVia::None;
 };

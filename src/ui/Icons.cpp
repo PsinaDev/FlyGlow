@@ -211,6 +211,22 @@ void draw(QPainter& p, Id id, const QColor& c)
         p.drawPath(w);
         break;
     }
+    case Id::Mirror: {
+        p.drawPolygon(QPolygonF({QPointF(9.5, 6.5), QPointF(9.5, 17.5), QPointF(4, 17.5)}));
+        p.setBrush(c);
+        p.drawPolygon(QPolygonF({QPointF(14.5, 6.5), QPointF(14.5, 17.5), QPointF(20, 17.5)}));
+        QPen axis = pen;
+        axis.setWidthF(1.4);
+        axis.setDashPattern({1.2, 2.0});
+        p.setPen(axis);
+        p.drawLine(QPointF(12, 3.5), QPointF(12, 20.5));
+        break;
+    }
+    case Id::Code:
+        p.drawPolyline(QPolygonF({QPointF(8.5, 7.5), QPointF(4, 12), QPointF(8.5, 16.5)}));
+        p.drawPolyline(QPolygonF({QPointF(15.5, 7.5), QPointF(20, 12), QPointF(15.5, 16.5)}));
+        p.drawLine(QPointF(13.5, 5.5), QPointF(10.5, 18.5));
+        break;
     }
 }
 

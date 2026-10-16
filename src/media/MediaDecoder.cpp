@@ -3,6 +3,7 @@
 #include "MediaInternal.h"
 
 #include <QCoreApplication>
+#include <QFile>
 #include <QFileInfo>
 #include <QImageReader>
 #include <QPainter>
@@ -193,6 +194,11 @@ DecodedClip decodeFile(const QString& path, const DecodeOptions& options, const 
     }
     {
         QImageReader reader(path);
+        if (!reader.canRead()) {
+            // Downloads often carry the wrong extension, like a WebP saved as .png, so let the bytes decide.
+            reader.setFileName(path);
+            reader.setDecideFormatFromContent(true);
+        }
         if (reader.canRead()) {
             if (reader.format() == "png") {
                 DecodedClip clip;
@@ -203,8 +209,15 @@ DecodedClip decodeFile(const QString& path, const DecodeOptions& options, const 
         }
     }
     DecodedClip clip = detail::decodeVideo(path, options, progress);
-    if (!clip.error.isEmpty() && !videoSuffixes().contains(QFileInfo(path).suffix().toLower()))
-        clip.error = QCoreApplication::translate("MediaDecoder", "This file format is not supported.");
+    if (!clip.error.isEmpty() && !videoSuffixes().contains(QFileInfo(path).suffix().toLower())) {
+        QFile file(path);
+        const QByteArray head = file.open(QIODevice::ReadOnly) ? file.read(12) : QByteArray();
+        if (head.startsWith("RIFF") && head.mid(8, 4) == "WEBP")
+            clip.error = QCoreApplication::translate("MediaDecoder",
+                                                     "This is a WebP image, and this build has no WebP support.");
+        else
+            clip.error = QCoreApplication::translate("MediaDecoder", "This file format is not supported.");
+    }
     return clip;
 }
 

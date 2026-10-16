@@ -43,6 +43,8 @@ public:
 
     /** Indices of the up to 6 hex neighbours. */
     const std::vector<int>& neighbors(int i) const { return m_neighbors[size_t(i)]; }
+    /** The LED in the same row on the other side of the vertical axis. */
+    int mirrorOf(int i) const;
 
     /** Nearest LED to p (layout units), or -1 if none is within maxDist. */
     int ledAt(const QPointF& p, double maxDist = 0.6) const;

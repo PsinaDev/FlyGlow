@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(FlyGlow VERSION 0.1.0 LANGUAGES CXX)
+project(FlyGlow VERSION 0.2.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,8 +22,10 @@ target_link_libraries(flyglow_core PUBLIC Qt6::Core Qt6::Gui)
 file(GLOB FG_DEVICE_SOURCES CONFIGURE_DEPENDS src/device/*.cpp src/device/*.h)
 file(GLOB FG_MEDIA_SOURCES CONFIGURE_DEPENDS src/media/*.cpp src/media/*.h)
 file(GLOB FG_UI_SOURCES CONFIGURE_DEPENDS src/ui/*.cpp src/ui/*.h)
+file(GLOB FG_SHADER_SOURCES CONFIGURE_DEPENDS src/shader/*.cpp src/shader/*.h)
 
-qt_add_executable(FlyGlow WIN32 src/main.cpp ${FG_UI_SOURCES} ${FG_DEVICE_SOURCES} ${FG_MEDIA_SOURCES})
+qt_add_executable(FlyGlow WIN32 src/main.cpp ${FG_UI_SOURCES} ${FG_DEVICE_SOURCES} ${FG_MEDIA_SOURCES}
+    ${FG_SHADER_SOURCES})
 target_link_libraries(FlyGlow PRIVATE flyglow_core Qt6::Widgets Qt6::Network Qt6::Concurrent)
 target_compile_definitions(FlyGlow PRIVATE FLYGLOW_VERSION="${PROJECT_VERSION}"
     FLYGLOW_VERSION_RC=${PROJECT_VERSION_MAJOR},${PROJECT_VERSION_MINOR},${PROJECT_VERSION_PATCH},0)
@@ -60,6 +62,11 @@ endif()
 if(EXISTS ${CMAKE_SOURCE_DIR}/tools/effects_check.cpp)
     qt_add_executable(effects_check tools/effects_check.cpp)
     target_link_libraries(effects_check PRIVATE flyglow_core)
+endif()
+if(EXISTS ${CMAKE_SOURCE_DIR}/tools/shader_check.cpp)
+    qt_add_executable(shader_check tools/shader_check.cpp ${FG_SHADER_SOURCES}
+        src/media/LedSampler.cpp src/media/LedSampler.h)
+    target_link_libraries(shader_check PRIVATE flyglow_core Qt6::Concurrent)
 endif()
 if(EXISTS ${CMAKE_SOURCE_DIR}/tools/ipc_probe.cpp)
     qt_add_executable(ipc_probe tools/ipc_probe.cpp ${FG_DEVICE_SOURCES})

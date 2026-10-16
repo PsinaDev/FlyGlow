@@ -45,6 +45,12 @@ void DockView::setBrushHardness(double h)
     update();
 }
 
+void DockView::setMirror(bool on)
+{
+    m_mirror = on;
+    update();
+}
+
 void DockView::setMaskOverlay(const std::vector<float>* mask)
 {
     m_mask = mask;
@@ -249,11 +255,14 @@ void DockView::footprint(int centerLed, QVector<int>& leds, QVector<float>& weig
         return;
     const LedLayout& L = LedLayout::cd2();
     const QPointF c = L.led(centerLed).pos;
+    const QPointF mc = L.led(L.mirrorOf(centerLed)).pos;
     const double reach = m_brushSize - 1;
     const double solid = reach * m_hardness;
     for (const Led& led : L.leds()) {
         // Hex neighbours sit 1.0 apart, so ring k is everything within k + slack.
-        const double d = std::hypot(led.pos.x() - c.x(), led.pos.y() - c.y());
+        double d = std::hypot(led.pos.x() - c.x(), led.pos.y() - c.y());
+        if (m_mirror)
+            d = std::min(d, std::hypot(led.pos.x() - mc.x(), led.pos.y() - mc.y()));
         if (d > reach + 0.2)
             continue;
         const double w = d <= solid + 0.2 ? 1.0 : 1.0 - fx::smooth(solid, reach + 1.0, d);

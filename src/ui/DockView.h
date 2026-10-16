@@ -27,6 +27,8 @@ public:
     int brushSize() const { return m_brushSize; }
     /** 0..1; at 1 every LED in the footprint gets full weight. */
     void setBrushHardness(double h);
+    /** Brush and mask strokes also land on the mirror image across the dock's vertical axis. */
+    void setMirror(bool on);
     /** Not owned: must stay valid until replaced. nullptr hides the overlay. */
     void setMaskOverlay(const std::vector<float>* mask);
     void setHint(const QString& text);
@@ -64,6 +66,7 @@ private:
     Tool m_tool = Tool::None;
     int m_brushSize = 1;
     double m_hardness = 1.0;
+    bool m_mirror = false;
     std::vector<float> m_strokeWeights;
     int m_lastCenter = -1;
     QString m_hint;

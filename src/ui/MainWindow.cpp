@@ -7,6 +7,7 @@
 #include "Language.h"
 #include "MediaImportDialog.h"
 #include "Project.h"
+#include "ShaderEditor.h"
 #include "Theme.h"
 #include "Timeline.h"
 #include "Translate.h"
@@ -84,6 +85,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 
     QSettings settings;
     m_maxFrames = std::clamp(settings.value("output/maxFrames", 200).toInt(), 20, 255);
+    m_dockPreview = settings.value("preview/asDock", false).toBool();
     m_brushColor = settings.value("paint/color", QColor(0, 200, 255)).value<QColor>();
 
     auto* root = new QWidget(this);
@@ -107,6 +109,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
     m_toolStrip = buildToolStrip();
     sv->addWidget(m_toolStrip);
     m_dock = new DockView(stage);
+    m_dock->setMirror(m_mirrorBtn->isChecked());
     sv->addWidget(m_dock, 1);
     sv->addWidget(buildTransport());
     m_timeline = new Timeline(stage);
@@ -217,7 +220,8 @@ void MainWindow::retranslateUi()
     setTip(m_brushBtn, tr("Brush (B)"));
     setTip(m_eraserBtn, tr("Eraser (E)"));
     setTip(m_fillBtn, tr("Fill similar neighbouring LEDs (G)"));
-    setTip(m_pickerBtn, tr("Eyedropper (I). Right-clicking the dock picks a colour too"));
+    setTip(m_pickerBtn, tr("Eyedropper (I). Alt+click picks a colour with any tool"));
+    setTip(m_mirrorBtn, tr("Mirror: brush, eraser and fill also work on the other half of the dock (M)"));
     m_sizeLabel->setText(tr("Size"));
     m_sizeSlider->setToolTip(tr("1 — exactly one LED, 2 — the LED and its six neighbours, and so on"));
     m_hardLabel->setText(tr("Hardness"));
@@ -352,6 +356,10 @@ QWidget* MainWindow::buildToolStrip()
     for (QToolButton* b : {m_brushBtn, m_eraserBtn, m_fillBtn, m_pickerBtn})
         h->addWidget(b);
     h->addSpacing(6);
+    m_mirrorBtn = flatTool(m_paintTools, icons::Id::Mirror, true);
+    m_mirrorBtn->setChecked(QSettings().value("paint/mirror", false).toBool());
+    h->addWidget(m_mirrorBtn);
+    h->addSpacing(6);
     m_colorBtn = new ColorButton(m_paintTools);
     m_colorBtn->setFixedSize(46, 28);
     h->addWidget(m_colorBtn);
@@ -378,6 +386,10 @@ QWidget* MainWindow::buildToolStrip()
     connect(m_eraserBtn, &QToolButton::clicked, this, [this] { selectTool(PaintTool::Eraser); });
     connect(m_fillBtn, &QToolButton::clicked, this, [this] { selectTool(PaintTool::Fill); });
     connect(m_pickerBtn, &QToolButton::clicked, this, [this] { selectTool(PaintTool::Picker); });
+    connect(m_mirrorBtn, &QToolButton::toggled, this, [this](bool on) {
+        m_dock->setMirror(on);
+        QSettings().setValue("paint/mirror", on);
+    });
     connect(m_colorBtn, &ColorButton::colorChanged, this, &MainWindow::setBrushColor);
     connect(m_sizeSlider, &SliderRow::valueChanged, this, [this](double v) { m_dock->setBrushSize(int(std::lround(v))); });
     connect(m_hardSlider, &SliderRow::valueChanged, this, [this](double v) { m_dock->setBrushHardness(v / 100.0); });
@@ -477,6 +489,8 @@ void MainWindow::wireProject()
     });
     connect(m_library, &EffectLibrary::replaceRequested, this, &MainWindow::replaceCurrentEffect);
     connect(m_library, &EffectLibrary::importRequested, this, &MainWindow::importMedia);
+    connect(m_library, &EffectLibrary::shaderRequested, this, &MainWindow::addShaderLayer);
+    connect(m_inspector, &Inspector::shaderEditRequested, this, &MainWindow::openShaderEditor);
 
     connect(m_inspector, &Inspector::maskPaintToggled, this, [this](bool on) {
         m_maskMode = on;
@@ -534,6 +548,7 @@ void MainWindow::wireShortcuts()
     shortcut(QKeySequence(Qt::Key_E), [this] { selectTool(PaintTool::Eraser); });
     shortcut(QKeySequence(Qt::Key_G), [this] { selectTool(PaintTool::Fill); });
     shortcut(QKeySequence(Qt::Key_I), [this] { selectTool(PaintTool::Picker); });
+    shortcut(QKeySequence(Qt::Key_M), [this] { m_mirrorBtn->toggle(); });
     shortcut(QKeySequence(Qt::Key_K), [this] { addKeyAtPlayhead(); });
     shortcut(QKeySequence(Qt::Key_Delete), [this] { removeSelectedKey(); });
     shortcut(QKeySequence(Qt::Key_BracketLeft), [this] {
@@ -648,7 +663,28 @@ void MainWindow::renderPreview()
 {
     std::vector<Rgb> out;
     const Scene& scene = m_project->scene();
-    scene.render(m_phase, LedLayout::cd2(), out);
+    if (m_dockPreview) {
+        int frames = 1, period = 1;
+        bakeTiming(scene, m_maxFrames, &frames, &period);
+        // Each frame holds for its whole step, and dithering error carries over only into the frame right after it.
+        const int frame = std::min(frames - 1, int(m_phase * frames));
+        if (frame != m_previewFrame) {
+            if (m_previewFrame >= 0 && frame == (m_previewFrame + 1) % frames)
+                m_previewErrIn = m_previewErrOut;
+            else
+                m_previewErrIn.clear();
+            m_previewFrame = frame;
+        }
+        scene.render(double(frame) / frames, LedLayout::cd2(), out);
+        m_previewErrOut = m_previewErrIn;
+        std::vector<uchar> codes(out.size() * 3);
+        encodeFrame(out, scene.outputGamma, scene.dither && frames > 1 ? &m_previewErrOut : nullptr, codes.data());
+        auto light = [](uchar v) { return float(std::pow(v / 255.0, kDockGamma)); };
+        for (size_t i = 0; i < out.size(); ++i)
+            out[i] = {light(codes[i * 3]), light(codes[i * 3 + 1]), light(codes[i * 3 + 2])};
+    } else {
+        scene.render(m_phase, LedLayout::cd2(), out);
+    }
     const float k = float(scene.brightness) / 100.f;
     if (k < 0.999f)
         for (Rgb& c : out)
@@ -775,28 +811,34 @@ void MainWindow::onFill(int led)
     const int key = kf->addKey(m_phase);
     m_selectedKey = key;
     const auto& colors = kf->key(key).colors;
-    const Rgba target = colors[size_t(led)];
-    auto similar = [&](const Rgba& c) {
-        if (target.a < 0.05f && c.a < 0.05f)
-            return true;
-        return std::abs(c.r - target.r) + std::abs(c.g - target.g) + std::abs(c.b - target.b) < 0.03f
-               && std::abs(c.a - target.a) < 0.05f;
-    };
     const LedLayout& L = LedLayout::cd2();
-    std::vector<char> seen(size_t(L.count()), 0);
-    std::deque<int> queue{led};
-    seen[size_t(led)] = 1;
     std::vector<int> region;
-    while (!queue.empty()) {
-        const int i = queue.front();
-        queue.pop_front();
-        region.push_back(i);
-        for (int n : L.neighbors(i))
-            if (!seen[size_t(n)] && similar(colors[size_t(n)])) {
-                seen[size_t(n)] = 1;
-                queue.push_back(n);
-            }
-    }
+    auto flood = [&](int seed) {
+        const Rgba target = colors[size_t(seed)];
+        auto similar = [&](const Rgba& c) {
+            if (target.a < 0.05f && c.a < 0.05f)
+                return true;
+            return std::abs(c.r - target.r) + std::abs(c.g - target.g) + std::abs(c.b - target.b) < 0.03f
+                   && std::abs(c.a - target.a) < 0.05f;
+        };
+        std::vector<char> seen(size_t(L.count()), 0);
+        std::deque<int> queue{seed};
+        seen[size_t(seed)] = 1;
+        while (!queue.empty()) {
+            const int i = queue.front();
+            queue.pop_front();
+            region.push_back(i);
+            for (int n : L.neighbors(i))
+                if (!seen[size_t(n)] && similar(colors[size_t(n)])) {
+                    seen[size_t(n)] = 1;
+                    queue.push_back(n);
+                }
+        }
+    };
+    // Both regions are found before anything is painted, so the mirrored seed still sees the original colours.
+    flood(led);
+    if (m_mirrorBtn->isChecked())
+        flood(L.mirrorOf(led));
     const Rgba brush(color::fromQColor(m_brushColor), 1.f);
     for (int i : region)
         kf->setLed(key, i, brush);
@@ -925,6 +967,22 @@ void MainWindow::importMedia()
     m_project->addLayer(std::move(layer));
 }
 
+void MainWindow::addShaderLayer()
+{
+    m_project->checkpoint();
+    if (m_project->addEffectLayer(QStringLiteral("shader")) >= 0)
+        openShaderEditor();
+}
+
+void MainWindow::openShaderEditor()
+{
+    if (!m_shaderEditor)
+        m_shaderEditor = new ShaderEditor(m_project, this);
+    m_shaderEditor->show();
+    m_shaderEditor->raise();
+    m_shaderEditor->activateWindow();
+}
+
 void MainWindow::updateConnectionUi()
 {
     const bool usb = m_hid->isPresent();
@@ -1011,13 +1069,23 @@ void MainWindow::showOutputSettings()
         v->addWidget(l);
     };
 
+    auto* asDockRow = new QHBoxLayout();
+    asDockRow->addWidget(new QLabel(tr("Preview as on the dock"), &dlg), 1);
+    auto* asDock = new ToggleSwitch(&dlg);
+    asDock->setChecked(m_dockPreview);
+    asDockRow->addWidget(asDock);
+    v->addLayout(asDockRow);
+    addNote(tr("Shows what the dock will play: each frame held for the dock's step, the output gamma, the 8-bit "
+               "levels and dithering. The LEDs themselves are more saturated than a monitor can show."));
+
+    v->addSpacing(8);
     v->addWidget(new QLabel(tr("Output gamma"), &dlg));
     auto* gamma = new SliderRow(&dlg);
     gamma->setRange(0.6, 2.6, 0.05);
     gamma->setValue(scene.outputGamma);
     v->addWidget(gamma);
-    addNote(tr("1.0 sends linear brightness to the dock: its colours keep the same light ratios as the preview. "
-               "2.2 matches what Space Station sends (brighter midtones). Pick by eye."));
+    addNote(tr("The dock's firmware turns values into light along its own curve, close to gamma 2.2, so 2.2 keeps "
+               "the preview's light ratios on the LEDs. Lower values make dark colours darker and cut fades short."));
 
     v->addSpacing(8);
     auto* ditherRow = new QHBoxLayout();
@@ -1034,8 +1102,8 @@ void MainWindow::showOutputSettings()
     frames->setRange(20, 255, 1);
     frames->setValue(m_maxFrames);
     v->addWidget(frames);
-    addNote(tr("More frames play smoother but upload longer (~0.1 s per frame). Space Station never sends more "
-               "than 200; values above 200 are untested on the firmware."));
+    addNote(tr("More frames play smoother but upload longer (~0.1 s per frame). Space Station never sends more than "
+               "200."));
 
     v->addSpacing(8);
     v->addWidget(new QLabel(tr("Language"), &dlg));
@@ -1066,6 +1134,9 @@ void MainWindow::showOutputSettings()
     scene.dither = dither->isChecked();
     m_maxFrames = int(std::lround(frames->value()));
     QSettings().setValue("output/maxFrames", m_maxFrames);
+    m_dockPreview = asDock->isChecked();
+    m_previewFrame = -1;
+    QSettings().setValue("preview/asDock", m_dockPreview);
     m_project->notifySettingsChanged();
     const QString newLanguage = language->currentData().toString();
     if (newLanguage != currentLanguage)

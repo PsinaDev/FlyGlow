@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>Smooth, layered lighting for the Flydigi CD2 charging dock.</b><br>
-  Effects in layers, LED-by-LED painting, GIF and video, side by side with Space Station.
+  Effects in layers, LED-by-LED painting, media and Shadertoy shaders, side by side with Space Station.
 </p>
 
 <p align="center">
@@ -41,8 +41,11 @@ the frames it receives, so FlyGlow renders better frames and uploads them.
   area each layer covers.
 - **Your own animation.** Paint the LEDs directly (size 1 is exactly one LED), set keyframes on the timeline and let
   FlyGlow interpolate everything in between, smooth, linear or stepped.
-- **GIF and video import.** GIF, APNG, PNG/JPEG and MP4/MOV/M4V/AVI/WMV. Each LED averages its own hex cell of the
+- **Media import.** PNG/JPEG, GIF, APNG, WebP and MP4/MOV/M4V/AVI/WMV. Each LED averages its own hex cell of the
   picture; fit, zoom, pan, rotate, trim and colour controls included.
+- **Shaders.** Paste a Shadertoy-style GLSL `mainImage`: it runs on the GPU and each LED averages its cell of the
+  frame. A crossfade closes the loop for shaders driven by `iTime`; `iPhase` loops by itself. Built-in presets to
+  start from, `.glsl` files to open and save.
 - **Side by side with Space Station.** Uploads go straight to the dock over USB, so Space Station can stay open for
   the controller and the dock settings.
 - **Everyday comforts.** Undo and redo, `.flyglow` scene files, session autosave, file association, English and
@@ -103,7 +106,7 @@ A Visual Studio solution is generated, not written by hand; F5 then starts FlyGl
 cmake -S . -B build-vs -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.10.3/msvc2022_64
 ```
 
-`packaging\build-release.cmd` produces the portable zip and the installer in `dist\`; set `QTDIR` and, if needed,
+`packaging\build-release.cmd` produces the portable zip and the installer in `dist\<version>\`; set `QTDIR` and, if needed,
 `ISCC` first. Keep the checkout path short: CMake's try-compile paths hit the Windows 260-character limit under deep
 roots.
 
@@ -111,6 +114,8 @@ Developer tools built alongside the app:
 
 - `effects_check <dir>` - checks every effect for NaN, loop seams and harsh steps, and writes PNG previews.
 - `media_check <file> <dir>` - decodes a clip and writes a filmstrip of the sampled LEDs.
+- `shader_check <shader.glsl> <dir>` - compiles a shader like the Shader layer does, prints driver messages and timing,
+  writes GPU frames and the LED result.
 - `ipc_probe` - read-only queries to Space Station's service; `--selftest` runs offline.
 - `FLYGLOW_NO_DEVICE=1` - starts the app without touching the dock.
 

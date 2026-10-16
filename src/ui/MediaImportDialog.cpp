@@ -254,7 +254,7 @@ std::unique_ptr<Layer> MediaImportDialog::run(QWidget* parent, double* suggested
                             .value("media/lastDir",
                                    QStandardPaths::writableLocation(QStandardPaths::PicturesLocation))
                             .toString();
-    const QString path = QFileDialog::getOpenFileName(parent, tr("Import GIF or video"), dir, fileFilter());
+    const QString path = QFileDialog::getOpenFileName(parent, tr("Import media"), dir, fileFilter());
     if (path.isEmpty())
         return nullptr;
     settings.setValue("media/lastDir", QFileInfo(path).absolutePath());

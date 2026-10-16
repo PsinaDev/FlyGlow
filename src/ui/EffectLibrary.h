@@ -20,6 +20,7 @@ signals:
     void addRequested(const QString& typeId);
     void replaceRequested(const QString& typeId);
     void importRequested();
+    void shaderRequested();
 
 protected:
     void changeEvent(QEvent* e) override;
@@ -36,6 +37,7 @@ private:
     QPushButton* m_add;
     QPushButton* m_replace;
     QPushButton* m_import;
+    QPushButton* m_shader;
 };
 
 } // namespace fg

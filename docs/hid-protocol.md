@@ -41,7 +41,7 @@ The data blob is:
 
 | Bytes | Content |
 |---|---|
-| 1 | frame count, 1..255 |
+| 1 | frame count, 1..255 (Space Station sends up to 200; 250 also played fine) |
 | 1 | period: frame interval in 20 ms units |
 | 1 | brightness, 1..100 |
 | 1 | mode, `3` = Custom |
@@ -52,6 +52,11 @@ The data blob is:
 The frame count must match the frames sent: the dock does not clear its frame memory, so a short write plays
 leftovers of the previous animation. A pack round trip takes about 9 ms, so a 200-frame animation
 (1945 packs) uploads in about 17 s.
+
+The LEDs do not give out light in proportion to the value: on firmware 0.0.3.9 values up to 8 leave them dark,
+and the response is close to `(value / 255)^2.2`. FlyGlow therefore sends gamma-2.2-encoded values by default;
+`examples/dock-curve-test.flyglow` shows the low values and a 50% checker next to values 128 and 186 for
+checking another unit.
 
 ## 4. Useful read-only commands
 

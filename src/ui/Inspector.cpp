@@ -10,6 +10,7 @@
 #include "core/Effect.h"
 #include "core/KeyframeEffect.h"
 #include "core/LedLayout.h"
+#include "shader/ShaderEffect.h"
 
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -17,6 +18,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
+#include <QPushButton>
 #include <QScrollArea>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -170,6 +172,9 @@ Inspector::Inspector(Project* project, QWidget* parent) : QWidget(parent), m_pro
     m_effectHint->setWordWrap(true);
     m_effectHint->setObjectName("Dim");
     cv->addWidget(m_effectHint);
+    m_shaderEdit = new QPushButton(icons::get(icons::Id::Code), QString(), content);
+    m_shaderEdit->setVisible(false);
+    cv->addWidget(m_shaderEdit);
     m_params = new ParamPanel(content);
     cv->addWidget(m_params);
     cv->addStretch(1);
@@ -249,6 +254,7 @@ Inspector::Inspector(Project* project, QWidget* parent) : QWidget(parent), m_pro
         m_project->notifyLayerChanged(m_project->currentIndex());
     });
     connect(m_maskPaint, &QToolButton::toggled, this, &Inspector::maskPaintToggled);
+    connect(m_shaderEdit, &QPushButton::clicked, this, &Inspector::shaderEditRequested);
     connect(m_maskClear, &QToolButton::clicked, this, [this] {
         Layer* l = m_project->currentLayer();
         if (!l || l->mask.empty())
@@ -328,6 +334,7 @@ void Inspector::retranslateUi()
     setTip(m_maskClear, tr("Whole dock (reset the area)"));
     m_maskInvert->setText(tr("Invert"));
     m_maskInvert->setToolTip(tr("Invert the area"));
+    m_shaderEdit->setText(tr("Edit shader code…"));
 
     rebuildList();
     syncCurrent();
@@ -430,10 +437,12 @@ void Inspector::syncCurrent()
         m_effectHint->setText(tr("Paint right on the dock: brush, eraser, fill and eyedropper are in the strip above it.\n"
                                  "Strokes go into the keyframe at the playhead; if there is none, one is created. "
                                  "Colours flow smoothly between keyframes."));
+        m_shaderEdit->setVisible(dynamic_cast<ShaderEffect*>(l->effect.get()) != nullptr);
         m_params->setEffect(isKeys ? nullptr : l->effect.get());
     } else {
         m_effectTitle->setText(tr("Add a layer from the effect library on the left"));
         m_effectHint->setVisible(false);
+        m_shaderEdit->setVisible(false);
         m_params->setEffect(nullptr);
     }
     m_syncing = false;

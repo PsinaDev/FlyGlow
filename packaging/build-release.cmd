@@ -3,9 +3,11 @@ setlocal EnableExtensions
 for %%I in ("%~dp0..") do set "ROOT=%%~fI"
 if not defined QTDIR set "QTDIR=D:\Qt\6.10.3\msvc2022_64"
 set "BUILD=%ROOT%\br"
-set "DIST=%ROOT%\dist"
-set "STAGE=%DIST%\FlyGlow"
 if not defined ISCC set "ISCC=%LOCALAPPDATA%\Programs\Inno Setup 7\ISCC.exe"
+if not exist "%QTDIR%\plugins\imageformats\qwebp.dll" (
+    echo The WebP plugin is missing from "%QTDIR%". Install the Qt Image Formats module.
+    exit /b 1
+)
 
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 for /f "usebackq delims=" %%V in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSDIR=%%V"
@@ -24,6 +26,9 @@ if not defined VERSION (
     echo Could not read the project version from "%BUILD%\CMakeCache.txt".
     exit /b 1
 )
+set "DIST=%ROOT%\dist\%VERSION%"
+set "STAGE=%DIST%\FlyGlow"
+if not exist "%DIST%" mkdir "%DIST%" || exit /b 1
 set "ZIP=%DIST%\FlyGlow-%VERSION%-portable-win64.zip"
 set "SETUP=FlyGlow-%VERSION%-setup-win64"
 

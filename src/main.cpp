@@ -1,6 +1,8 @@
 #include "core/Effect.h"
 #include "core/KeyframeEffect.h"
 #include "core/MediaEffect.h"
+#include "shader/ShaderEffect.h"
+#include "shader/ShaderRenderer.h"
 #include "ui/Language.h"
 #include "ui/MainWindow.h"
 #include "ui/Theme.h"
@@ -28,8 +30,11 @@ int main(int argc, char* argv[])
     fg::registerBuiltinEffects();
     fg::EffectRegistry::instance().add<fg::KeyframeEffect>();
     fg::EffectRegistry::instance().add<fg::MediaEffect>();
+    fg::EffectRegistry::instance().add<fg::ShaderEffect>();
     fg::theme::apply(app);
 
+    // Its GL context has to go before the application object, and after every window that renders shaders.
+    fg::ShaderRenderer shaderRenderer;
     fg::MainWindow w;
     w.show();
     const QStringList args = QApplication::arguments();

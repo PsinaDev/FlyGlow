@@ -139,6 +139,12 @@ int LedLayout::ledAt(const QPointF& p, double maxDist) const
     return best;
 }
 
+int LedLayout::mirrorOf(int i) const
+{
+    const Led& l = led(i);
+    return rowStart(l.row) + rowLength(l.row) - 1 - l.col;
+}
+
 std::vector<int> LedLayout::ledsWithin(const QPointF& p, double r) const
 {
     std::vector<int> out;

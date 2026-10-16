@@ -37,7 +37,7 @@ public:
     std::vector<std::unique_ptr<Layer>> layers;   /**< [0] is the bottom layer */
     double loopSeconds = 4.0;
     int brightness = 100;       /**< dock brightness 1..100 */
-    double outputGamma = 1.0;   /**< 1 sends linear light, 2.2 sends sRGB-encoded values */
+    double outputGamma = 2.2;   /**< matching kDockGamma keeps the preview's light ratios on the LEDs; 1 sends linear values */
     bool dither = true;         /**< temporal error diffusion across frames when baking */
 
     /** Composites at phase into out, resized to layout.count(); linear light. */
@@ -67,7 +67,21 @@ void bakeTiming(const Scene& scene, int maxFrames, int* frameCount, int* period)
 /** @param maxFrames Clamped to 2..255. */
 BakeResult bake(const Scene& scene, const LedLayout& layout, int maxFrames = 200);
 
+/**
+ * How the dock turns an output value into light: roughly (value / 255)^kDockGamma. Measured on firmware 0.0.3.9,
+ * where values up to 8 leave the LEDs dark.
+ */
+inline constexpr double kDockGamma = 2.2;
+
 /** Linear light to the unrounded 0..255 output value for the given output gamma. */
 float encodeOutput(float linear, double gamma);
+
+/**
+ * One frame's 8-bit RGB values exactly as bake() sends them.
+ * @param err  Rounding error per channel, carried in from the previous frame and handed on to the next;
+ *             resized to fit and zeroed when it does not. nullptr rounds without dithering.
+ * @param out  frame.size() * 3 bytes.
+ */
+void encodeFrame(const std::vector<Rgb>& frame, double gamma, std::vector<float>* err, uchar* out);
 
 } // namespace fg

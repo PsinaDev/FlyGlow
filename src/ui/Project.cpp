@@ -220,7 +220,7 @@ void Project::newDefault()
     m_scene.layers.clear();
     m_scene.loopSeconds = 6.0;
     m_scene.brightness = 100;
-    m_scene.outputGamma = 1.0;
+    m_scene.outputGamma = kDockGamma;
     m_scene.dither = true;
     const auto& entries = EffectRegistry::instance().entries();
     QString base = "aurora";

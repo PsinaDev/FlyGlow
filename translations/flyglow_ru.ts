@@ -14,9 +14,34 @@
         <translation>Рисование</translation>
     </message>
     <message>
-        <location filename="../src/core/MediaEffect.cpp" line="85"/>
-        <source>Video / GIF</source>
-        <translation>Видео / GIF</translation>
+        <location filename="../src/shader/ShaderEffect.cpp" line="50"/>
+        <source>Shader</source>
+        <translation>Шейдер</translation>
+    </message>
+    <message>
+        <location filename="../src/shader/ShaderEffect.cpp" line="61"/>
+        <source>Speed</source>
+        <translation>Скорость</translation>
+    </message>
+    <message>
+        <location filename="../src/shader/ShaderEffect.cpp" line="62"/>
+        <source>Loop crossfade</source>
+        <translation>Сшивка цикла</translation>
+    </message>
+    <message>
+        <location filename="../src/shader/ShaderEffect.cpp" line="63"/>
+        <source>Zoom</source>
+        <translation>Масштаб</translation>
+    </message>
+    <message>
+        <location filename="../src/shader/ShaderEffect.cpp" line="64"/>
+        <source>Shift right</source>
+        <translation>Сдвиг вправо</translation>
+    </message>
+    <message>
+        <location filename="../src/shader/ShaderEffect.cpp" line="65"/>
+        <source>Shift down</source>
+        <translation>Сдвиг вниз</translation>
     </message>
     <message>
         <location filename="../src/core/MediaEffect.cpp" line="90"/>
@@ -541,6 +566,11 @@
         <translation>Этот формат файла не поддерживается.</translation>
     </message>
     <message>
+        <location filename="../src/media/MediaDecoder.cpp" line="216"/>
+        <source>This is a WebP image, and this build has no WebP support.</source>
+        <translation>Это изображение WebP, а в этой сборке нет поддержки WebP.</translation>
+    </message>
+    <message>
         <location filename="../src/media/VideoDecoderMf.cpp" line="210"/>
         <location filename="../src/media/VideoDecoderMf.cpp" line="216"/>
         <location filename="../src/media/VideoDecoderMf.cpp" line="249"/>
@@ -711,13 +741,23 @@
     </message>
     <message>
         <location filename="../src/ui/EffectLibrary.cpp" line="113"/>
-        <source>Import GIF / video…</source>
-        <translation>Импорт GIF / видео…</translation>
+        <source>Import media…</source>
+        <translation>Импорт медиа…</translation>
     </message>
     <message>
         <location filename="../src/ui/EffectLibrary.cpp" line="114"/>
-        <source>Map a GIF, picture or video clip onto the dock&apos;s LEDs as a new layer</source>
-        <translation>Разложить GIF, картинку или видеоролик по диодам дока новым слоем</translation>
+        <source>Map a picture, GIF, APNG or video clip onto the dock&apos;s LEDs as a new layer</source>
+        <translation>Разложить картинку, GIF, APNG или видеоролик по диодам дока новым слоем</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/EffectLibrary.cpp" line="119"/>
+        <source>New shader…</source>
+        <translation>Новый шейдер…</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/EffectLibrary.cpp" line="120"/>
+        <source>Write or paste a GLSL shader in the Shadertoy style and map it onto the LEDs as a new layer</source>
+        <translation>Написать или вставить GLSL-шейдер в стиле Shadertoy и разложить его по диодам новым слоем</translation>
     </message>
     <message>
         <location filename="../src/ui/EffectLibrary.cpp" line="85"/>
@@ -905,6 +945,11 @@ The eraser in the tool strip removes them from the area.</source>
         <translation>Инвертировать область</translation>
     </message>
     <message>
+        <location filename="../src/ui/Inspector.cpp" line="337"/>
+        <source>Edit shader code…</source>
+        <translation>Редактировать код шейдера…</translation>
+    </message>
+    <message>
         <location filename="../src/ui/Inspector.cpp" line="428"/>
         <source>Effect</source>
         <translation>Эффект</translation>
@@ -1010,8 +1055,13 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="220"/>
-        <source>Eyedropper (I). Right-clicking the dock picks a colour too</source>
-        <translation>Пипетка (I). Правый клик по доку тоже берёт цвет</translation>
+        <source>Eyedropper (I). Alt+click picks a colour with any tool</source>
+        <translation>Пипетка (I). Alt+клик берёт цвет с любым инструментом</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainWindow.cpp" line="221"/>
+        <source>Mirror: brush, eraser and fill also work on the other half of the dock (M)</source>
+        <translation>Зеркало: кисть, ластик и заливка срабатывают и на другой половине дока (M)</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="221"/>
@@ -1195,14 +1245,24 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
         <translation>В док уйдёт кадров: %1 · шаг %2 мс (%3 к/с) · петля %4 с</translation>
     </message>
     <message>
+        <location filename="../src/ui/MainWindow.cpp" line="1073"/>
+        <source>Preview as on the dock</source>
+        <translation>Превью как на доке</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainWindow.cpp" line="1078"/>
+        <source>Shows what the dock will play: each frame held for the dock&apos;s step, the output gamma, the 8-bit levels and dithering. The LEDs themselves are more saturated than a monitor can show.</source>
+        <translation>Показывает то, что сыграет док: каждый кадр держится на шаге дока, применяются гамма вывода, 8-битные уровни и дизеринг. Сами диоды насыщеннее, чем может показать монитор.</translation>
+    </message>
+    <message>
         <location filename="../src/ui/MainWindow.cpp" line="1014"/>
         <source>Output gamma</source>
         <translation>Гамма вывода</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1019"/>
-        <source>1.0 sends linear brightness to the dock: its colours keep the same light ratios as the preview. 2.2 matches what Space Station sends (brighter midtones). Pick by eye.</source>
-        <translation>1,0 — в док уходит линейная яркость: соотношения света на доке такие же, как в превью. 2,2 — как отправляет Space Station (полутона светлее). Подбирайте на глаз.</translation>
+        <source>The dock&apos;s firmware turns values into light along its own curve, close to gamma 2.2, so 2.2 keeps the preview&apos;s light ratios on the LEDs. Lower values make dark colours darker and cut fades short.</source>
+        <translation>Прошивка дока сама переводит значения в свет по своей кривой, близкой к гамме 2,2, поэтому при 2,2 соотношения света на диодах такие же, как в превью. Меньшие значения делают тёмные цвета темнее и обрезают затухания.</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1024"/>
@@ -1221,8 +1281,8 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1037"/>
-        <source>More frames play smoother but upload longer (~0.1 s per frame). Space Station never sends more than 200; values above 200 are untested on the firmware.</source>
-        <translation>Больше кадров — плавнее, но дольше загрузка (~0,1 с на кадр). Space Station не отправляет больше 200; значения выше 200 на прошивке не проверялись.</translation>
+        <source>More frames play smoother but upload longer (~0.1 s per frame). Space Station never sends more than 200.</source>
+        <translation>Больше кадров — плавнее, но дольше загрузка (~0,1 с на кадр). Space Station не отправляет больше 200.</translation>
     </message>
     <message>
         <location filename="../src/ui/MainWindow.cpp" line="1041"/>
@@ -1325,8 +1385,8 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
     </message>
     <message>
         <location filename="../src/ui/MediaImportDialog.cpp" line="257"/>
-        <source>Import GIF or video</source>
-        <translation>Импорт GIF или видео</translation>
+        <source>Import media</source>
+        <translation>Импорт медиа</translation>
     </message>
     <message>
         <location filename="../src/ui/MediaImportDialog.cpp" line="273"/>
@@ -1552,6 +1612,134 @@ Strokes go into the keyframe at the playhead; if there is none, one is created. 
         <location filename="../src/ui/Project.cpp" line="84"/>
         <source>%1 (copy)</source>
         <translation>%1 (копия)</translation>
+    </message>
+</context>
+<context>
+    <name>fg::ShaderEditor</name>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="308"/>
+        <source>Shader</source>
+        <translation>Шейдер</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="309"/>
+        <source>GLSL in the Shadertoy style: write mainImage(out vec4 fragColor, in vec2 fragCoord). Available: iResolution, iTime, iTimeDelta, iFrame, iDate, iPhase (0..1 through the loop) and iLoop (loop length in seconds); iMouse is always zero. Textures and buffer passes are not supported, iChannel reads as black. Ctrl+Enter applies at once.</source>
+        <translation>GLSL в стиле Shadertoy: функция mainImage(out vec4 fragColor, in vec2 fragCoord). Доступны iResolution, iTime, iTimeDelta, iFrame, iDate, iPhase (0..1 за цикл) и iLoop (длина цикла в секундах); iMouse всегда ноль. Текстуры и буферные проходы не поддерживаются, iChannel читается как чёрный. Ctrl+Enter применяет сразу.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="313"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="350"/>
+        <source>Line %1: %2</source>
+        <translation>Строка %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="372"/>
+        <source>OpenGL 3.3 is not available on this PC, so shaders cannot run.</source>
+        <translation>На этом компьютере нет OpenGL 3.3, шейдеры не запустятся.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="375"/>
+        <source>Select a shader layer to edit its code.</source>
+        <translation>Выберите слой-шейдер, чтобы править его код.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="377"/>
+        <source>Compiled: the layer plays this code.</source>
+        <translation>Скомпилировано: слой играет этот код.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="380"/>
+        <source>Does not compile: the layer keeps playing the last working version.</source>
+        <translation>Не компилируется: слой играет последнюю рабочую версию.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="20"/>
+        <source>Rainbow rings</source>
+        <translation>Радужные кольца</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="21"/>
+        <source>Kaleidoscope</source>
+        <translation>Калейдоскоп</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="22"/>
+        <source>Heartbeat</source>
+        <translation>Сердцебиение</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="23"/>
+        <source>Lava lamp</source>
+        <translation>Лава-лампа</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="24"/>
+        <source>Warp stars</source>
+        <translation>Звёздный прыжок</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="25"/>
+        <source>Synthwave</source>
+        <translation>Синтвейв</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="26"/>
+        <source>Pac-Man</source>
+        <translation>Пакман</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="340"/>
+        <source>Presets</source>
+        <translation>Пресеты</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="341"/>
+        <source>Open .glsl…</source>
+        <translation>Открыть .glsl…</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="342"/>
+        <source>Save .glsl…</source>
+        <translation>Сохранить .glsl…</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="420"/>
+        <source>Open shader</source>
+        <translation>Открыть шейдер</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="421"/>
+        <source>GLSL shaders (*.glsl *.frag *.fs *.txt)</source>
+        <translation>GLSL-шейдеры (*.glsl *.frag *.fs *.txt)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="421"/>
+        <source>All files (*)</source>
+        <translation>Все файлы (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="426"/>
+        <source>Could not open</source>
+        <translation>Не удалось открыть</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="437"/>
+        <source>Save shader</source>
+        <translation>Сохранить шейдер</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="438"/>
+        <source>GLSL shaders (*.glsl)</source>
+        <translation>GLSL-шейдеры (*.glsl)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/ShaderEditor.cpp" line="444"/>
+        <source>Could not save</source>
+        <translation>Не удалось сохранить</translation>
     </message>
 </context>
 <context>

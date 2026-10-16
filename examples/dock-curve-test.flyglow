@@ -1,0 +1,61 @@
+{
+ "format": "flyglow",
+ "version": 1,
+ "loopSeconds": 4,
+ "brightness": 100,
+ "outputGamma": 1.0,
+ "dither": false,
+ "layers": [
+  {
+   "name": "Dock curve test",
+   "visible": true,
+   "opacity": 1,
+   "blend": 0,
+   "effect": {
+    "type": "keyframes",
+    "params": {},
+    "keys": [
+     {
+      "time": 0.0,
+      "easing": 0,
+      "colors": [
+       "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff",
+       "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff", "0d0d0dff",
+       "161616ff", "161616ff", "161616ff", "161616ff", "161616ff", "161616ff", "161616ff", "161616ff",
+       "161616ff", "161616ff", "161616ff", "161616ff", "161616ff", "161616ff", "161616ff",
+       "222222ff", "222222ff", "222222ff", "222222ff", "222222ff", "222222ff", "222222ff", "222222ff",
+       "222222ff", "222222ff", "222222ff", "222222ff", "222222ff", "222222ff", "222222ff", "222222ff",
+       "323232ff", "323232ff", "323232ff", "323232ff", "323232ff", "323232ff", "323232ff", "323232ff",
+       "323232ff", "323232ff", "323232ff", "323232ff", "323232ff", "323232ff", "323232ff",
+       "474747ff", "474747ff", "474747ff", "474747ff", "474747ff", "474747ff", "474747ff",
+       "474747ff", "474747ff", "474747ff", "474747ff", "474747ff", "474747ff", "474747ff",
+       "636363ff", "636363ff", "636363ff", "636363ff", "636363ff", "636363ff", "636363ff",
+       "636363ff", "636363ff", "636363ff", "636363ff", "636363ff", "636363ff",
+       "ffffffff", "000000ff", "ffffffff", "000000ff", "ffffffff", "000000ff",
+       "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff",
+       "000000ff", "ffffffff", "000000ff", "ffffffff", "000000ff", "000000ff",
+       "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff",
+       "ffffffff", "000000ff", "ffffffff", "000000ff", "ffffffff",
+       "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff",
+       "000000ff", "ffffffff", "000000ff", "ffffffff", "000000ff",
+       "bcbcbcff", "bcbcbcff", "bcbcbcff", "bcbcbcff",
+       "ffffffff", "000000ff", "ffffffff", "000000ff",
+       "dededeff", "dededeff", "dededeff", "dededeff",
+       "000000ff", "ffffffff", "000000ff", "000000ff",
+       "dededeff", "dededeff", "dededeff",
+       "ffffffff", "000000ff", "ffffffff",
+       "dededeff", "dededeff", "dededeff",
+       "000000ff", "ffffffff", "000000ff",
+       "dededeff", "dededeff",
+       "ffffffff", "000000ff",
+       "dededeff", "dededeff",
+       "000000ff", "000000ff",
+       "dededeff"
+      ]
+     }
+    ]
+   },
+   "mask": []
+  }
+ ]
+}

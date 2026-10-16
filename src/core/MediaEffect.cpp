@@ -82,7 +82,7 @@ std::vector<Rgb> decodeFrame(const QString& s, size_t leds)
 
 QString MediaEffect::name() const
 {
-    return QT_TRANSLATE_NOOP("Effects", "Video / GIF");
+    return QT_TRANSLATE_NOOP("Effects", "Media");
 }
 
 QString MediaEffect::category() const

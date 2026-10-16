@@ -1,11 +1,11 @@
 ﻿#ifndef AppVersion
-  #define AppVersion "0.1.0"
+  #define AppVersion "0.2.0"
 #endif
 #ifndef StageDir
-  #define StageDir "..\dist\FlyGlow"
+  #define StageDir "..\dist\" + AppVersion + "\FlyGlow"
 #endif
 #ifndef OutputDir
-  #define OutputDir "..\dist"
+  #define OutputDir "..\dist\" + AppVersion
 #endif
 
 #define AppName "FlyGlow"

@@ -60,8 +60,11 @@ EffectLibrary::EffectLibrary(QWidget* parent) : QWidget(parent)
     v->addLayout(buttons);
     m_import = new QPushButton(icons::get(icons::Id::Film), QString(), this);
     v->addWidget(m_import);
+    m_shader = new QPushButton(icons::get(icons::Id::Code), QString(), this);
+    v->addWidget(m_shader);
 
     connect(m_import, &QPushButton::clicked, this, &EffectLibrary::importRequested);
+    connect(m_shader, &QPushButton::clicked, this, &EffectLibrary::shaderRequested);
     connect(m_search, &QLineEdit::textChanged, this, &EffectLibrary::applyFilter);
     connect(m_list, &QListWidget::itemDoubleClicked, this, [this](QListWidgetItem* item) {
         const QString t = item->data(kTypeRole).toString();
@@ -110,8 +113,10 @@ void EffectLibrary::retranslateUi()
     m_add->setToolTip(tr("Add the selected effect as a new layer on top of the others"));
     m_replace->setText(tr("Replace"));
     m_replace->setToolTip(tr("Put the selected effect into the current layer"));
-    m_import->setText(tr("Import GIF / video…"));
-    m_import->setToolTip(tr("Map a GIF, picture or video clip onto the dock's LEDs as a new layer"));
+    m_import->setText(tr("Import media…"));
+    m_import->setToolTip(tr("Map a picture, GIF, APNG or video clip onto the dock's LEDs as a new layer"));
+    m_shader->setText(tr("New shader…"));
+    m_shader->setToolTip(tr("Write or paste a GLSL shader in the Shadertoy style and map it onto the LEDs as a new layer"));
 
     for (int i = 0; i < m_list->count(); ++i) {
         QListWidgetItem* item = m_list->item(i);

@@ -47,7 +47,7 @@ public:
      * for the same dock replaces one still waiting, which then finishes with ok = false.
      *
      * @param rgb         frameCount * 162 * 3 bytes, LEDs in row-major order, 8-bit RGB.
-     * @param frameCount  1..255; 200 is known to be safe.
+     * @param frameCount  1..255; 200 is known to be safe, 250 also played fine on firmware 0.0.3.9.
      * @param period      Frame interval in 20 ms units, clamped to 1..255.
      * @param brightness  Clamped to 1..100.
      * @return Request id echoed by uploadProgress() and uploadFinished(), which fires once the service

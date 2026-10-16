@@ -5,4 +5,12 @@
         <file>flyglow-256.png</file>
         <file>flyglow.ico</file>
     </qresource>
+    <qresource prefix="/shaders">
+        <file alias="kaleidoscope.glsl">../examples/shaders/kaleidoscope.glsl</file>
+        <file alias="heartbeat.glsl">../examples/shaders/heartbeat.glsl</file>
+        <file alias="lava-lamp.glsl">../examples/shaders/lava-lamp.glsl</file>
+        <file alias="warp-stars.glsl">../examples/shaders/warp-stars.glsl</file>
+        <file alias="synthwave.glsl">../examples/shaders/synthwave.glsl</file>
+        <file alias="pacman.glsl">../examples/shaders/pacman.glsl</file>
+    </qresource>
 </RCC>

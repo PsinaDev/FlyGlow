@@ -6,6 +6,7 @@ class QComboBox;
 class QLabel;
 class QLineEdit;
 class QListWidget;
+class QPushButton;
 class QToolButton;
 
 namespace fg {
@@ -23,6 +24,7 @@ public:
 
 signals:
     void maskPaintToggled(bool on);
+    void shaderEditRequested();
 
 protected:
     void changeEvent(QEvent* e) override;
@@ -59,6 +61,7 @@ private:
 
     QLabel* m_effectTitle;
     QLabel* m_effectHint;
+    QPushButton* m_shaderEdit;
     ParamPanel* m_params;
     bool m_syncing = false;
 };

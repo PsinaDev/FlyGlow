@@ -149,7 +149,7 @@ bool Scene::fromJson(const QJsonObject& o, QString* error)
     layers = std::move(loaded);
     loopSeconds = std::clamp(o.value("loopSeconds").toDouble(4.0), 0.2, 60.0);
     brightness = std::clamp(o.value("brightness").toInt(100), 1, 100);
-    outputGamma = std::clamp(o.value("outputGamma").toDouble(1.0), 0.5, 3.0);
+    outputGamma = std::clamp(o.value("outputGamma").toDouble(kDockGamma), 0.5, 3.0);
     dither = o.value("dither").toBool(true);
     return true;
 }
@@ -195,31 +195,34 @@ BakeResult bake(const Scene& scene, const LedLayout& layout, int maxFrames)
     r.rgb.resize(qsizetype(r.frameCount) * n * 3);
     auto* outBytes = reinterpret_cast<uchar*>(r.rgb.data());
     const bool dither = scene.dither && r.frameCount > 1;
-    std::vector<float> err(size_t(n) * 3, 0.f);
+    std::vector<float> err;
+    std::vector<uchar> warmup(size_t(n) * 3);
 
     // The first dither pass only warms up the error the loop carries round into frame 0.
-    for (int pass = dither ? 0 : 1; pass < 2; ++pass) {
-        for (int k = 0; k < r.frameCount; ++k) {
-            const std::vector<Rgb>& f = frames[size_t(k)];
-            for (int i = 0; i < n; ++i) {
-                const float ch[3] = {f[size_t(i)].r, f[size_t(i)].g, f[size_t(i)].b};
-                for (int c = 0; c < 3; ++c) {
-                    float v = encodeOutput(ch[c], scene.outputGamma);
-                    float q;
-                    if (dither) {
-                        v += err[size_t(i) * 3 + c];
-                        q = std::clamp(std::round(v), 0.f, 255.f);
-                        err[size_t(i) * 3 + c] = std::clamp(v - q, -0.5f, 0.5f);
-                    } else {
-                        q = std::clamp(std::round(v), 0.f, 255.f);
-                    }
-                    if (pass == 1)
-                        outBytes[(size_t(k) * n + i) * 3 + c] = uchar(q);
-                }
-            }
+    for (int pass = dither ? 0 : 1; pass < 2; ++pass)
+        for (int k = 0; k < r.frameCount; ++k)
+            encodeFrame(frames[size_t(k)], scene.outputGamma, dither ? &err : nullptr,
+                        pass == 1 ? outBytes + size_t(k) * size_t(n) * 3 : warmup.data());
+    return r;
+}
+
+void encodeFrame(const std::vector<Rgb>& frame, double gamma, std::vector<float>* err, uchar* out)
+{
+    if (err && err->size() != frame.size() * 3)
+        err->assign(frame.size() * 3, 0.f);
+    for (size_t i = 0; i < frame.size(); ++i) {
+        const float ch[3] = {frame[i].r, frame[i].g, frame[i].b};
+        for (size_t c = 0; c < 3; ++c) {
+            const size_t at = i * 3 + c;
+            float v = encodeOutput(ch[c], gamma);
+            if (err)
+                v += (*err)[at];
+            const float q = std::clamp(std::round(v), 0.f, 255.f);
+            if (err)
+                (*err)[at] = std::clamp(v - q, -0.5f, 0.5f);
+            out[at] = uchar(q);
         }
     }
-    return r;
 }
 
 } // namespace fg
